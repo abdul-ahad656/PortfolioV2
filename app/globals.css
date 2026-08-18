@@ -1,26 +1,171 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Warm Industrial Light */
+    --background: 36 25% 97.5%;          /* #F9F8F6 warm cream */
+    --foreground: 270 6% 10.5%;         /* #18181B deep onyx */
+    --card: 36 22% 96%;
+    --card-foreground: 270 6% 10.5%;
+    --popover: 36 22% 96%;
+    --popover-foreground: 270 6% 10.5%;
+
+    --primary: 270 6% 10.5%;             /* onyx */
+    --primary-foreground: 36 25% 97.5%;
+
+    --secondary: 36 14% 92%;
+    --secondary-foreground: 270 6% 10.5%;
+
+    --muted: 36 14% 92%;
+    --muted-foreground: 270 6% 38%;
+
+    --accent: 11 68% 53.5%;              /* #D95338 burnt terracotta */
+    --accent-foreground: 36 25% 97.5%;
+
+    --amber: 33 88% 39%;                 /* #C27803 warm amber */
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 36 25% 97.5%;
+
+    --border: 270 6% 10.5% / 0.08;       /* hairline */
+    --input: 270 6% 10.5% / 0.12;
+    --ring: 11 68% 53.5%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Deep Charcoal Editorial */
+    --background: 240 10% 8%;             /* #121316 */
+    --foreground: 36 25% 96%;
+    --card: 240 10% 10.5%;
+    --card-foreground: 36 25% 96%;
+    --popover: 240 10% 10.5%;
+    --popover-foreground: 36 25% 96%;
+
+    --primary: 36 25% 96%;
+    --primary-foreground: 240 10% 8%;
+
+    --secondary: 240 6% 16%;
+    --secondary-foreground: 36 25% 96%;
+
+    --muted: 240 6% 16%;
+    --muted-foreground: 36 10% 62%;
+
+    --accent: 11 68% 55%;                 /* terracotta pops on dark */
+    --accent-foreground: 36 25% 97.5%;
+
+    --amber: 33 88% 52%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 36 25% 97.5%;
+
+    --border: 36 25% 96% / 0.08;
+    --input: 36 25% 96% / 0.12;
+    --ring: 11 68% 55%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv01", "cv11";
+  }
+  ::selection {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display), Georgia, serif;
+  }
+  .font-sans {
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+  .font-mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+  }
+  .mono-label {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .hairline {
+    border-color: hsl(var(--foreground) / 0.08);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .dark .grain::after {
+    mix-blend-mode: screen;
+    opacity: 0.05;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--foreground) / 0.15);
+  border-radius: 999px;
+  border: 2px solid hsl(var(--background));
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent) / 0.6);
+}
+
+/* Hide native cursor when custom cursor active (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  .cursor-none-desktop,
+  .cursor-none-desktop * {
+    cursor: none !important;
+  }
+}
+
+/* Magnetic underline reveal */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* Staggered reveal helper */
+.reveal-mask {
+  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
+  mask-image: linear-gradient(180deg, #000 60%, transparent);
 }
