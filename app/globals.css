@@ -1,71 +1,89 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    /* Warm Industrial Light */
-    --background: 36 25% 97.5%;          /* #F9F8F6 warm cream */
-    --foreground: 270 6% 10.5%;         /* #18181B deep onyx */
-    --card: 36 22% 96%;
-    --card-foreground: 270 6% 10.5%;
-    --popover: 36 22% 96%;
-    --popover-foreground: 270 6% 10.5%;
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+}
 
-    --primary: 270 6% 10.5%;             /* onyx */
-    --primary-foreground: 36 25% 97.5%;
+:root {
+  /* Warm Industrial Light */
+  --background: 36 25% 97.5%;          /* #F9F8F6 warm cream */
+  --foreground: 270 6% 10.5%;         /* #18181B deep onyx */
+  --card: 36 22% 96%;
+  --card-foreground: 270 6% 10.5%;
+  --popover: 36 22% 96%;
+  --popover-foreground: 270 6% 10.5%;
 
-    --secondary: 36 14% 92%;
-    --secondary-foreground: 270 6% 10.5%;
+  --primary: 270 6% 10.5%;             /* onyx */
+  --primary-foreground: 36 25% 97.5%;
 
-    --muted: 36 14% 92%;
-    --muted-foreground: 270 6% 38%;
+  --secondary: 36 14% 92%;
+  --secondary-foreground: 270 6% 10.5%;
 
-    --accent: 11 68% 53.5%;              /* #D95338 burnt terracotta */
-    --accent-foreground: 36 25% 97.5%;
+  --muted: 36 14% 92%;
+  --muted-foreground: 270 6% 38%;
 
-    --amber: 33 88% 39%;                 /* #C27803 warm amber */
+  --accent: 11 68% 53.5%;              /* #D95338 burnt terracotta */
+  --accent-foreground: 36 25% 97.5%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 36 25% 97.5%;
+  --amber: 33 88% 39%;                 /* #C27803 warm amber */
 
-    --border: 270 6% 10.5% / 0.08;       /* hairline */
-    --input: 270 6% 10.5% / 0.12;
-    --ring: 11 68% 53.5%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 36 25% 97.5%;
 
-    --radius: 0.5rem;
-  }
+  --border: 270 6% 10.5% / 0.08;       /* hairline */
+  --input: 270 6% 10.5% / 0.12;
+  --ring: 11 68% 53.5%;
 
-  .dark {
-    /* Deep Charcoal Editorial */
-    --background: 240 10% 8%;             /* #121316 */
-    --foreground: 36 25% 96%;
-    --card: 240 10% 10.5%;
-    --card-foreground: 36 25% 96%;
-    --popover: 240 10% 10.5%;
-    --popover-foreground: 36 25% 96%;
+  --radius: 0.5rem;
+}
 
-    --primary: 36 25% 96%;
-    --primary-foreground: 240 10% 8%;
+.dark {
+  /* Deep Charcoal Editorial */
+  --background: 240 10% 8%;             /* #121316 */
+  --foreground: 36 25% 96%;
+  --card: 240 10% 10.5%;
+  --card-foreground: 36 25% 96%;
+  --popover: 240 10% 10.5%;
+  --popover-foreground: 36 25% 96%;
 
-    --secondary: 240 6% 16%;
-    --secondary-foreground: 36 25% 96%;
+  --primary: 36 25% 96%;
+  --primary-foreground: 240 10% 8%;
 
-    --muted: 240 6% 16%;
-    --muted-foreground: 36 10% 62%;
+  --secondary: 240 6% 16%;
+  --secondary-foreground: 36 25% 96%;
 
-    --accent: 11 68% 55%;                 /* terracotta pops on dark */
-    --accent-foreground: 36 25% 97.5%;
+  --muted: 240 6% 16%;
+  --muted-foreground: 36 10% 62%;
 
-    --amber: 33 88% 52%;
+  --accent: 11 68% 55%;                 /* terracotta pops on dark */
+  --accent-foreground: 36 25% 97.5%;
 
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 36 25% 97.5%;
+  --amber: 33 88% 52%;
 
-    --border: 36 25% 96% / 0.08;
-    --input: 36 25% 96% / 0.12;
-    --ring: 11 68% 55%;
-  }
+  --destructive: 0 62% 45%;
+  --destructive-foreground: 36 25% 97.5%;
+
+  --border: 36 25% 96% / 0.08;
+  --input: 36 25% 96% / 0.12;
+  --ring: 11 68% 55%;
 }
 
 @layer base {
