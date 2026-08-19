@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Abdul Ahad
 
-## Getting Started
+AI Engineer · Full Stack Developer · Product Builder
 
-First, run the development server:
+A premium, motion-first portfolio experience designed to present Abdul Ahad as a high-signal engineer building production-grade AI products, backend systems, and scalable digital experiences.
+
+Built with Next.js and a customized editorial design system, this portfolio blends product storytelling with engineering credibility — turning technical depth into a compelling visual narrative.
+
+## Why this portfolio
+
+This project is crafted to communicate a clear value proposition:
+
+- AI systems and LLM workflows built for real-world use
+- Full stack development from prototype to production
+- Cloud-native, performance-conscious architecture
+- Clean product thinking backed by shipped execution
+- A premium personal brand for hiring, collaboration, and experimentation
+
+## Experience highlights
+
+- RAG pipelines and AI application architecture
+- LLM agents and workflow orchestration
+- Scalable backend systems and APIs
+- Full stack product development
+- Frontend experiences engineered for clarity and conversion
+
+## Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Framer Motion
+- Lucide React
+- next-themes
+- Custom motion and interaction utilities
+
+## Portfolio sections
+
+- Hero introduction
+- Technical Arsenal
+- Selected Projects
+- Experience timeline
+- Contact / direct outreach
+
+The experience is structured as a polished deck-style narrative, optimized for both browsing and storytelling.
+
+## Project structure
+
+```bash
+app/
+  globals.css
+  layout.tsx
+  page.tsx
+
+components/
+  deck-shell.tsx
+  cursor-trailer.tsx
+  magnetic.tsx
+  nav-context.tsx
+  theme-provider.tsx
+  sections/
+    arsenal.tsx
+    contact.tsx
+    experience.tsx
+    hero.tsx
+    projects.tsx
+
+hooks/
+lib/
+public/
+```
+
+## Run locally
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open in the browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Production build
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Design direction
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This portfolio follows a premium landing-page aesthetic:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- warm editorial palette
+- refined typography
+- layered glassmorphism and subtle surfaces
+- cinematic transitions and motion cues
+- custom cursor and magnetic interactions
+- dark/light theme support for flexibility and polish
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is for personal portfolio use and brand presentation.
