@@ -7,11 +7,10 @@ import {
   type ReactNode,
 } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Mail, Sun, Moon, Menu, X } from 'lucide-react';
+import { Github, Linkedin, Mail, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Magnetic } from '@/components/magnetic';
 import { NavContext } from '@/components/nav-context';
-import { useTheme } from 'next-themes';
 import Image from 'next/image';
 
 export interface SectionDef {
@@ -33,9 +32,13 @@ export function DeckShell({ sections, children }: DeckShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const goTo = useCallback((id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (id === 'hero') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
     setSidebarOpen(false);
   }, []);
@@ -43,25 +46,38 @@ export function DeckShell({ sections, children }: DeckShellProps) {
   const openSidebar = useCallback(() => setSidebarOpen(true), []);
   const closeSidebar = useCallback(() => setSidebarOpen(false), []);
 
-  // Track active section while scrolling
+  // Track active section while scrolling (hero is fixed, so use scroll + observers)
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
+    const contentSections = sections.filter((s) => s.id !== 'hero');
 
-    sections.forEach((s) => {
+    const onScroll = () => {
+      if (window.scrollY < window.innerHeight * 0.45) {
+        setActiveId('hero');
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const observers: IntersectionObserver[] = [];
+    contentSections.forEach((s) => {
       const el = document.getElementById(s.id);
       if (!el) return;
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) setActiveId(s.id);
+          if (entry.isIntersecting && window.scrollY >= window.innerHeight * 0.45) {
+            setActiveId(s.id);
+          }
         },
-        { threshold: 0.35, rootMargin: '-10% 0px -40% 0px' }
+        { threshold: 0.45, rootMargin: '-5% 0px -35% 0px' }
       );
       observer.observe(el);
       observers.push(observer);
     });
 
-    return () => observers.forEach((o) => o.disconnect());
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      observers.forEach((o) => o.disconnect());
+    };
   }, [sections]);
 
   // Lock body scroll when sidebar is open
@@ -107,25 +123,29 @@ export function DeckShell({ sections, children }: DeckShellProps) {
         </AnimatePresence>
 
         <main className="relative w-full">
-          {sections.map((s) => (
-            <section
-              key={s.id}
-              id={s.id}
-              className={cn(
-                s.id === 'hero'
-                  ? 'relative min-h-screen'
-                  : 'relative min-h-screen px-4 py-16 md:px-8 md:py-20'
-              )}
-            >
-              {s.id === 'hero' ? (
-                children(s.id)
-              ) : (
-                <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-[1180px] flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-card/60 shadow-[0_1px_0_0_hsl(var(--foreground)/0.04),0_24px_60px_-24px_hsl(var(--foreground)/0.18)] backdrop-blur-sm">
+          {/* Fixed hero — stays pinned while content scrolls over it */}
+          <section id="hero" className="fixed inset-0 z-[1] h-screen w-full">
+            {children('hero')}
+          </section>
+
+          {/* Scroll spacer — one viewport of hero before sections stack up */}
+          <div className="relative h-screen w-full" aria-hidden />
+
+          {/* Stacking sections — slide up and cover the hero */}
+          {sections
+            .filter((s) => s.id !== 'hero')
+            .map((s, i) => (
+              <section
+                key={s.id}
+                id={s.id}
+                className="sticky top-0 min-h-screen bg-background px-4 py-16 md:px-8 md:py-20"
+                style={{ zIndex: 10 + i }}
+              >
+                <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-[1180px] flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-[0_1px_0_0_hsl(var(--foreground)/0.04),0_24px_60px_-24px_hsl(var(--foreground)/0.18)] backdrop-blur-sm">
                   {children(s.id)}
                 </div>
-              )}
-            </section>
-          ))}
+              </section>
+            ))}
         </main>
       </div>
     </NavContext.Provider>
@@ -175,10 +195,6 @@ function Sidebar({
   onNavigate: (id: string) => void;
   onClose: () => void;
 }) {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
   return (
     <motion.aside
       initial={{ x: '-100%' }}
@@ -265,30 +281,16 @@ function Sidebar({
           </span>
         </div>
 
-        <div className="mt-5 flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <SocialIcon href="https://github.com" label="GitHub">
-              <Github className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href="https://linkedin.com" label="LinkedIn">
-              <Linkedin className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href="mailto:buttabdul.ahad029@gmail.com" label="Email">
-              <Mail className="h-4 w-4" />
-            </SocialIcon>
-          </div>
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
-            aria-label="Toggle theme"
-          >
-            {mounted &&
-              (theme === 'dark' ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              ))}
-          </button>
+        <div className="mt-5 flex items-center gap-1">
+          <SocialIcon href="https://github.com" label="GitHub">
+            <Github className="h-4 w-4" />
+          </SocialIcon>
+          <SocialIcon href="https://linkedin.com" label="LinkedIn">
+            <Linkedin className="h-4 w-4" />
+          </SocialIcon>
+          <SocialIcon href="mailto:buttabdul.ahad029@gmail.com" label="Email">
+            <Mail className="h-4 w-4" />
+          </SocialIcon>
         </div>
       </div>
     </motion.aside>

@@ -51,12 +51,13 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${sans.variable} ${mono.variable} ${display.variable}`}
+      className={`dark ${sans.variable} ${mono.variable} ${display.variable}`}
     >
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
+          forcedTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
         >
