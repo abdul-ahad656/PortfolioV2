@@ -193,6 +193,20 @@
   touch-action: none;
 }
 
+.ai-mirror-image__portrait {
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+}
+
+.ai-mirror-image__robot {
+  transform-origin: center bottom;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .ai-mirror-image__glow {
   border: 1px solid rgba(255, 255, 255, var(--ring-opacity, 0.35));
   background: radial-gradient(
@@ -207,8 +221,4 @@
     inset 0 0 24px rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(3px) saturate(1.25);
   -webkit-backdrop-filter: blur(3px) saturate(1.25);
-}
-
-.ai-mirror-image__robot-inner {
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }

@@ -48,9 +48,10 @@ const DEFAULT_GLOW: Required<AIMirrorGlowSettings> = {
 };
 
 function buildMask(x: number, y: number, radius: number, feather: number): string {
-  if (radius <= 0) return 'radial-gradient(circle, transparent 0, transparent 100%)';
+  if (radius <= 0) return 'none';
   const inner = Math.max(0, radius - feather);
-  return `radial-gradient(circle ${radius}px at ${x}px ${y}px, black 0px, black ${inner}px, transparent ${radius}px)`;
+  // Portrait top layer: hide inside circle (transparent), show outside (black)
+  return `radial-gradient(circle ${radius}px at ${x}px ${y}px, transparent 0px, transparent ${inner}px, black ${radius}px)`;
 }
 
 export function AIMirrorImage({
@@ -70,7 +71,7 @@ export function AIMirrorImage({
   const glowSettings = { ...DEFAULT_GLOW, ...glow };
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const robotLayerRef = useRef<HTMLDivElement>(null);
+  const portraitLayerRef = useRef<HTMLDivElement>(null);
   const robotImageRef = useRef<HTMLDivElement>(null);
   const glowRingRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -86,7 +87,7 @@ export function AIMirrorImage({
 
   const applyFrame = useCallback(() => {
     const m = motion.current;
-    const robotLayer = robotLayerRef.current;
+    const portraitLayer = portraitLayerRef.current;
     const robotImage = robotImageRef.current;
     const glowRing = glowRingRef.current;
 
@@ -100,11 +101,10 @@ export function AIMirrorImage({
     const r = m.radius;
     const visible = r > 0.5;
 
-    if (robotLayer) {
+    if (portraitLayer) {
       const mask = buildMask(m.x, m.y, r, edgeFeather);
-      robotLayer.style.webkitMaskImage = mask;
-      robotLayer.style.maskImage = mask;
-      robotLayer.style.opacity = visible ? '1' : '0';
+      portraitLayer.style.webkitMaskImage = mask;
+      portraitLayer.style.maskImage = mask;
     }
 
     if (robotImage) {
@@ -119,7 +119,7 @@ export function AIMirrorImage({
       glowRing.style.height = `${size}px`;
       glowRing.style.transform = `translate3d(${m.x - r}px, ${m.y - r}px, 0)`;
       glowRing.style.opacity = visible
-        ? String(Math.min(1, (r / circleSize) * glowSettings.intensity))
+        ? String(Math.min(1, (r / (circleSize / 2)) * glowSettings.intensity))
         : '0';
     }
 
@@ -157,7 +157,7 @@ export function AIMirrorImage({
     (e: MouseEvent<HTMLDivElement>) => {
       motion.current.hovering = true;
       motion.current.active = true;
-      motion.current.targetRadius = circleSize;
+      motion.current.targetRadius = circleSize / 2;
       setCursor(e.clientX, e.clientY);
       startLoop();
     },
@@ -169,7 +169,7 @@ export function AIMirrorImage({
       setCursor(e.clientX, e.clientY);
       if (!motion.current.active) {
         motion.current.active = true;
-        motion.current.targetRadius = circleSize;
+        motion.current.targetRadius = circleSize / 2;
       }
       startLoop();
     },
@@ -208,8 +208,23 @@ export function AIMirrorImage({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Base — person */}
-      <div className="absolute inset-0">
+      {/* Robot — bottom layer, always rendered underneath */}
+      <div ref={robotImageRef} className="ai-mirror-image__robot absolute inset-0">
+        <Image
+          src={robotImage}
+          alt=""
+          fill
+          sizes="(max-width: 768px) 72vw, 34vw"
+          className={sharedImageClass}
+          draggable={false}
+        />
+      </div>
+
+      {/* Portrait — top layer, circular mask cuts a hole to reveal robot */}
+      <div
+        ref={portraitLayerRef}
+        className="ai-mirror-image__portrait pointer-events-none absolute inset-0 will-change-[mask-image]"
+      >
         <Image
           src={personImage}
           alt={alt}
@@ -219,27 +234,6 @@ export function AIMirrorImage({
           className={sharedImageClass}
           draggable={false}
         />
-      </div>
-
-      {/* Robot — revealed through circular mask */}
-      <div
-        ref={robotLayerRef}
-        className="ai-mirror-image__robot absolute inset-0 opacity-0 will-change-[mask-image,opacity]"
-        aria-hidden
-      >
-        <div
-          ref={robotImageRef}
-          className="ai-mirror-image__robot-inner absolute inset-0 origin-center will-change-transform"
-        >
-          <Image
-            src={robotImage}
-            alt=""
-            fill
-            sizes="(max-width: 768px) 72vw, 34vw"
-            className={sharedImageClass}
-            draggable={false}
-          />
-        </div>
       </div>
 
       {/* Portal ring / lens glow */}
