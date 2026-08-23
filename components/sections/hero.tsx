@@ -1,136 +1,127 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import { Magnetic } from '@/components/magnetic';
 import { useNav } from '@/components/nav-context';
 import type { SectionDef } from '@/components/deck-shell';
 
-interface HeroProps {
-  onNavigate?: (id: string) => void;
-}
-
-const metrics = [
-  { value: '03+', label: 'Years Experience' },
-  { value: '80%', label: 'Automation Efficiency' },
-  { value: '08+', label: 'Production Apps' },
-];
-
 const stagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
 };
+
 const item = {
-  hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
+  hidden: { opacity: 0, y: 24, filter: 'blur(8px)' },
   show: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { type: 'spring', damping: 24, stiffness: 200 },
+    transition: { type: 'spring', damping: 24, stiffness: 180 },
   },
 };
 
-export function Hero(_props: HeroProps) {
+export function Hero() {
   const { navigate } = useNav();
+
   return (
-    <div className="flex h-full flex-col">
-      {/* Top meta bar */}
-      <div className="flex items-center justify-between border-b border-foreground/10 px-6 py-3 md:px-10">
-        <span className="mono-label text-muted-foreground">01 — Introduction</span>
-        <span className="mono-label hidden text-muted-foreground md:inline">
-          Lahore, PK · GMT+5
-        </span>
+    <div className="relative flex min-h-screen flex-col overflow-hidden">
+      {/* Giant background name */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] select-none overflow-hidden"
+        aria-hidden
+      >
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="whitespace-nowrap text-[clamp(5rem,22vw,17rem)] font-bold leading-[0.82] tracking-[-0.04em] text-foreground translate-y-[18%] pl-[5vw]"
+        >
+          Abdul Ahad
+        </motion.h1>
       </div>
 
-      {/* Body */}
-      <div className="flex flex-1 flex-col justify-between px-6 py-10 md:px-14 md:py-14">
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-          className="max-w-3xl"
-        >
-          <motion.div variants={item} className="mb-6 flex items-center gap-3">
-            <span className="mono-label text-accent">●</span>
-            <span className="mono-label text-muted-foreground">
-              Currently building @ VisionsCraft
-            </span>
-          </motion.div>
-
-          <motion.h1
-            variants={item}
-            className="font-display text-[clamp(2.4rem,6vw,5.2rem)] leading-[0.95] tracking-[-0.02em] text-balance"
+      {/* Main content */}
+      <div className="relative z-10 flex flex-1 flex-col px-5 pb-8 pt-24 md:px-10 md:pb-12 md:pt-28 lg:px-16">
+        <div className="grid flex-1 grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
+          {/* Left column */}
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="show"
+            className="order-2 flex flex-col gap-6 lg:order-1 lg:max-w-[340px] lg:self-end lg:pb-32"
           >
-            Abdul Ahad
-            <span className="mt-2 block text-muted-foreground">
-              <span className="italic text-accent">AI Engineer</span> &amp; Full
-              Stack Developer
-            </span>
-          </motion.h1>
-
-          <motion.p
-            variants={item}
-            className="mt-7 max-w-xl text-[17px] leading-relaxed text-muted-foreground"
-          >
-            Architecting production-grade RAG pipelines, LLM agents, and scalable
-            cloud-native backend systems — from research prototype to deployed
-            product.
-          </motion.p>
-
-          <motion.div variants={item} className="mt-9 flex flex-wrap items-center gap-3">
-            <Magnetic strength={0.25}>
-              <button
-                onClick={() => navigate('projects')}
-                className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-[14px] font-medium text-background transition-colors hover:bg-accent hover:text-accent-foreground"
-              >
-                View Selected Work
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </button>
-            </Magnetic>
-            <Magnetic strength={0.25}>
-              <button
-                onClick={() => navigate('contact')}
-                className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-6 py-3 text-[14px] font-medium transition-colors hover:border-foreground/40 hover:bg-foreground/[0.03]"
-              >
-                Let&apos;s Connect
-              </button>
-            </Magnetic>
-          </motion.div>
-        </motion.div>
-
-        {/* Metrics grid */}
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-          className="mt-12 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-foreground/10 bg-foreground/10"
-        >
-          {metrics.map((m) => (
             <motion.div
-              key={m.label}
               variants={item}
-              className="group bg-card px-4 py-6 md:px-8 md:py-8"
+              className="inline-flex w-fit items-center gap-2.5 rounded-full border border-foreground/10 bg-foreground/[0.04] px-4 py-2 backdrop-blur-sm"
             >
-              <div className="font-display text-[clamp(2rem,4vw,3.4rem)] leading-none tracking-tight transition-colors group-hover:text-accent">
-                {m.value}
-              </div>
-              <div className="mono-label mt-3 text-muted-foreground">
-                {m.label}
-              </div>
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+              </span>
+              <span className="text-[13px] font-medium text-foreground/90">
+                Available for Work
+              </span>
             </motion.div>
-          ))}
-        </motion.div>
 
-        {/* Scroll hint */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-8 flex items-center gap-2 text-muted-foreground"
-        >
-          <ArrowDown className="h-3.5 w-3.5 animate-bounce" />
-          <span className="mono-label">Scroll or use arrow keys</span>
-        </motion.div>
+            <motion.h2
+              variants={item}
+              className="text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold leading-[1.15] tracking-[-0.02em] text-balance"
+            >
+              AI Engineer &amp; Full Stack Developer based in Lahore
+            </motion.h2>
+          </motion.div>
+
+          {/* Center portrait */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            className="order-1 relative mx-auto w-full max-w-[320px] lg:order-2 lg:max-w-[380px] xl:max-w-[420px]"
+          >
+            <div className="relative aspect-[3/4] w-full">
+              <Image
+                src="/portrait.jpeg"
+                alt="Abdul Ahad portrait"
+                fill
+                priority
+                className="object-cover object-center drop-shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+              />
+            </div>
+          </motion.div>
+
+          {/* Right column */}
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="show"
+            className="order-3 flex flex-col gap-8 lg:max-w-[340px] lg:self-end lg:pb-32 lg:justify-self-end"
+          >
+            <motion.p
+              variants={item}
+              className="text-[15px] leading-[1.7] text-muted-foreground md:text-[16px]"
+            >
+              Hi, I&apos;m Abdul Ahad — an AI engineer passionate about building
+              production-grade RAG pipelines, LLM agents, and scalable systems
+              that connect research to real-world impact.
+            </motion.p>
+
+            <motion.div variants={item}>
+              <Magnetic strength={0.2}>
+                <button
+                  onClick={() => navigate('projects')}
+                  className="group inline-flex items-center gap-4 rounded-full bg-accent py-3 pl-3 pr-7 text-[15px] font-semibold text-accent-foreground shadow-[0_8px_32px_-8px_hsl(var(--accent)/0.6)] transition-all hover:brightness-110"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-foreground/15 transition-transform group-hover:translate-x-0.5">
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
+                  See my works
+                </button>
+              </Magnetic>
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
