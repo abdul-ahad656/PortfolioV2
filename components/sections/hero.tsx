@@ -26,35 +26,59 @@ export function Hero() {
   const { navigate } = useNav();
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden">
-      {/* Giant background name */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] select-none overflow-hidden"
-        aria-hidden
+    <div className="relative min-h-screen w-full">
+      {/* Center portrait — behind the name */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+        className="pointer-events-none absolute bottom-0 left-1/2 z-[2] h-[min(88vh,860px)] w-[min(420px,72vw)] -translate-x-1/2 md:w-[min(460px,38vw)] lg:h-[min(92vh,900px)] lg:w-[min(500px,34vw)]"
       >
+        <Image
+          src="/portrait.jpeg"
+          alt="Abdul Ahad portrait"
+          fill
+          priority
+          sizes="(max-width: 768px) 72vw, 34vw"
+          className="object-contain object-bottom drop-shadow-[0_24px_80px_rgba(0,0,0,0.55)]"
+        />
+      </motion.div>
+
+      {/* Giant name — in front of portrait, full width */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[6] select-none">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="whitespace-nowrap text-[clamp(5rem,22vw,17rem)] font-bold leading-[0.82] tracking-[-0.04em] text-foreground translate-y-[18%] pl-[5vw]"
+          className="flex w-full translate-y-[14%] items-end justify-between px-[1.5vw] text-[clamp(3rem,16vw,13rem)] font-bold leading-[0.82] text-foreground"
+          aria-label="Abdul Ahad"
         >
-          Abdul Ahad
+          {Array.from('Abdul Ahad').map((char, i) =>
+            char === ' ' ? (
+              <span key={i} className="flex-[0.6]" aria-hidden />
+            ) : (
+              <span key={i} aria-hidden="true">
+                {char}
+              </span>
+            )
+          )}
         </motion.h1>
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 flex flex-1 flex-col px-5 pb-8 pt-24 md:px-10 md:pb-12 md:pt-28 lg:px-16">
-        <div className="grid flex-1 grid-cols-1 items-center gap-8 lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
+      {/* Side content overlays */}
+      <div className="relative z-[10] flex min-h-screen flex-col px-5 pb-10 pt-24 md:px-10 md:pb-14 md:pt-28 lg:px-16">
+        {/* Mobile: stacked layout below portrait area */}
+        <div className="flex flex-1 flex-col justify-end gap-10 pb-[42vh] md:pb-[38vh] lg:pb-0 lg:grid lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-8">
           {/* Left column */}
           <motion.div
             variants={stagger}
             initial="hidden"
             animate="show"
-            className="order-2 flex flex-col gap-6 lg:order-1 lg:max-w-[340px] lg:self-end lg:pb-32"
+            className="flex flex-col gap-6 lg:max-w-[320px] lg:justify-self-start xl:max-w-[360px]"
           >
             <motion.div
               variants={item}
-              className="inline-flex w-fit items-center gap-2.5 rounded-full border border-foreground/10 bg-foreground/[0.04] px-4 py-2 backdrop-blur-sm"
+              className="inline-flex w-fit items-center gap-2.5 rounded-full border border-foreground/10 bg-background/40 px-4 py-2 backdrop-blur-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/70" />
@@ -67,28 +91,10 @@ export function Hero() {
 
             <motion.h2
               variants={item}
-              className="text-[clamp(1.6rem,3.2vw,2.4rem)] font-bold leading-[1.15] tracking-[-0.02em] text-balance"
+              className="text-[clamp(1.5rem,3vw,2.35rem)] font-bold leading-[1.15] tracking-[-0.02em] text-balance"
             >
               AI Engineer &amp; Full Stack Developer based in Lahore
             </motion.h2>
-          </motion.div>
-
-          {/* Center portrait */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="order-1 relative mx-auto w-full max-w-[320px] lg:order-2 lg:max-w-[380px] xl:max-w-[420px]"
-          >
-            <div className="relative aspect-[3/4] w-full">
-              <Image
-                src="/portrait.jpeg"
-                alt="Abdul Ahad portrait"
-                fill
-                priority
-                className="object-cover object-center drop-shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
-              />
-            </div>
           </motion.div>
 
           {/* Right column */}
@@ -96,7 +102,7 @@ export function Hero() {
             variants={stagger}
             initial="hidden"
             animate="show"
-            className="order-3 flex flex-col gap-8 lg:max-w-[340px] lg:self-end lg:pb-32 lg:justify-self-end"
+            className="flex flex-col gap-8 lg:max-w-[320px] lg:justify-self-end xl:max-w-[360px]"
           >
             <motion.p
               variants={item}
