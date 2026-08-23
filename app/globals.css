@@ -221,3 +221,36 @@
   backdrop-filter: blur(3px) saturate(1.25);
   -webkit-backdrop-filter: blur(3px) saturate(1.25);
 }
+
+/* Engine Room — Technical Arsenal (light canvas, terracotta accent) */
+.engine-room {
+  --background: 36 25% 97.5%;
+  --foreground: 270 6% 10.5%;
+  --card: 0 0% 100%;
+  --card-foreground: 270 6% 10.5%;
+  --muted-foreground: 270 6% 38%;
+  --border: 270 6% 10.5% / 0.12;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.engine-room-line {
+  stroke: hsl(var(--accent));
+  fill: none;
+}
+
+.engine-room-line--active {
+  stroke: hsl(var(--accent));
+  filter: drop-shadow(0 0 4px hsl(var(--accent) / 0.35));
+}
+
+.engine-room-node--active {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .engine-room-node,
+  .arch-node {
+    transition: none !important;
+  }
+}

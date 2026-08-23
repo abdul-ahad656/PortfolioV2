@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Copy, Check, ArrowUpRight } from 'lucide-react';
 import { Magnetic } from '@/components/magnetic';
-import { SectionHeader } from '@/components/sections/arsenal';
+import { SectionHeader } from '@/components/section-header';
 
 const EMAIL = 'buttabdul.ahad029@gmail.com';
 const PHONE = '+92 314 4828190';

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SectionHeader } from '@/components/sections/arsenal';
+import { SectionHeader } from '@/components/section-header';
 
 interface Role {
   id: string;
