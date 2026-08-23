@@ -57,7 +57,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="flex w-full translate-y-[4%] items-end justify-between px-[1.5vw] text-[clamp(3rem,16vw,13rem)] font-bold leading-[0.82] text-foreground"
+          className="flex w-full translate-y-[calc(4%-5px)] items-end justify-between px-[1.5vw] text-[clamp(3rem,16vw,13rem)] font-bold leading-[0.82] text-foreground"
           aria-label="Abdul Ahad"
         >
           {Array.from('Abdul Ahad').map((char, i) =>
@@ -75,7 +75,7 @@ export function Hero() {
       {/* Side content overlays */}
       <div className="pointer-events-none relative z-[10] flex min-h-screen flex-col px-5 pb-10 pt-24 md:px-10 md:pb-14 md:pt-28 lg:px-16">
         {/* Mobile: stacked layout below portrait area */}
-        <div className="flex flex-1 flex-col justify-end gap-10 pb-[48vh] md:pb-[44vh] lg:pb-0 lg:grid lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start lg:pt-[18vh] lg:gap-8">
+        <div className="flex flex-1 -translate-y-[5px] flex-col justify-end gap-10 pb-[48vh] md:pb-[44vh] lg:pb-0 lg:grid lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start lg:pt-[18vh] lg:gap-8">
           {/* Left column */}
           <motion.div
             variants={stagger}
