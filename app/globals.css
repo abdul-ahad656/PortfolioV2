@@ -97,6 +97,7 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "ss01", "cv01", "cv11";
+    letter-spacing: -0.01em;
   }
   ::selection {
     background: hsl(var(--accent));
@@ -106,7 +107,9 @@
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.03em;
   }
   .font-sans {
     font-family: var(--font-sans), system-ui, sans-serif;
@@ -117,7 +120,7 @@
   .mono-label {
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 11px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 500;
   }

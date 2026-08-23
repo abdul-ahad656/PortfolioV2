@@ -35,7 +35,7 @@ export function Contact() {
             className="font-display text-[clamp(2rem,4.5vw,3.6rem)] leading-[1.02] tracking-tight text-balance"
           >
             Let&apos;s build something
-            <span className="block italic text-accent">that ships.</span>
+            <span className="block text-accent">that ships.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}

@@ -1,25 +1,19 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google';
+import { Plus_Jakarta_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 
-const sans = Inter({
+const sans = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
-const mono = JetBrains_Mono({
+const mono = IBM_Plex_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
-  display: 'swap',
-});
-
-const display = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
-  variable: '--font-display',
+  weight: ['400', '500'],
   display: 'swap',
 });
 
@@ -51,7 +45,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`dark ${sans.variable} ${mono.variable} ${display.variable}`}
+      className={`dark ${sans.variable} ${mono.variable}`}
     >
       <body className="font-sans antialiased">
         <ThemeProvider
