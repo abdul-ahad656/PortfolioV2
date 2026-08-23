@@ -5,20 +5,14 @@ import {
   useCallback,
   useEffect,
   type ReactNode,
-  type MouseEvent,
 } from 'react';
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from 'framer-motion';
-import { Github, Linkedin, Mail, Sun, Moon } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Github, Linkedin, Mail, Sun, Moon, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Magnetic } from '@/components/magnetic';
 import { NavContext } from '@/components/nav-context';
 import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 export interface SectionDef {
   id: string;
@@ -29,66 +23,142 @@ export interface SectionDef {
 
 interface DeckShellProps {
   sections: SectionDef[];
-  children: (activeId: string, direction: number) => ReactNode;
+  children: (sectionId: string) => ReactNode;
 }
 
 const springSoft = { damping: 30, stiffness: 220, mass: 0.8 };
 
 export function DeckShell({ sections, children }: DeckShellProps) {
   const [activeId, setActiveId] = useState(sections[0].id);
-  const [direction, setDirection] = useState(1);
-  const activeIndex = sections.findIndex((s) => s.id === activeId);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const goTo = useCallback(
-    (id: string) => {
-      const next = sections.findIndex((s) => s.id === id);
-      if (next === -1 || id === activeId) return;
-      setDirection(next > activeIndex ? 1 : -1);
-      setActiveId(id);
-    },
-    [activeId, activeIndex, sections]
-  );
+  const goTo = useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setSidebarOpen(false);
+  }, []);
 
-  // Keyboard navigation
+  const openSidebar = useCallback(() => setSidebarOpen(true), []);
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
+
+  // Track active section while scrolling
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-        const n = Math.min(activeIndex + 1, sections.length - 1);
-        if (n !== activeIndex) {
-          setDirection(1);
-          setActiveId(sections[n].id);
-        }
-      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-        const n = Math.max(activeIndex - 1, 0);
-        if (n !== activeIndex) {
-          setDirection(-1);
-          setActiveId(sections[n].id);
-        }
-      }
+    const observers: IntersectionObserver[] = [];
+
+    sections.forEach((s) => {
+      const el = document.getElementById(s.id);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveId(s.id);
+        },
+        { threshold: 0.35, rootMargin: '-10% 0px -40% 0px' }
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, [sections]);
+
+  // Lock body scroll when sidebar is open
+  useEffect(() => {
+    document.body.style.overflow = sidebarOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [activeIndex, sections]);
+  }, [sidebarOpen]);
 
   return (
-    <NavContext.Provider value={{ navigate: goTo }}>
-      <div className="relative min-h-screen w-full overflow-hidden bg-background grain">
-        <Sidebar
-          sections={sections}
-          activeId={activeId}
-          onNavigate={goTo}
-          activeIndex={activeIndex}
-        />
-        <DeckArea
-          sections={sections}
-          activeId={activeId}
-          direction={direction}
-          activeIndex={activeIndex}
-        >
-          {children}
-        </DeckArea>
+    <NavContext.Provider
+      value={{
+        navigate: goTo,
+        openSidebar,
+        closeSidebar,
+        sidebarOpen,
+      }}
+    >
+      <div className="relative min-h-screen w-full bg-background grain">
+        <NavPill onOpen={openSidebar} />
+
+        <AnimatePresence>
+          {sidebarOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
+                onClick={closeSidebar}
+                aria-hidden
+              />
+              <Sidebar
+                sections={sections}
+                activeId={activeId}
+                onNavigate={goTo}
+                onClose={closeSidebar}
+              />
+            </>
+          )}
+        </AnimatePresence>
+
+        <main className="relative w-full">
+          {sections.map((s) => (
+            <section
+              key={s.id}
+              id={s.id}
+              className={cn(
+                s.id === 'hero'
+                  ? 'relative min-h-screen'
+                  : 'relative min-h-screen px-4 py-16 md:px-8 md:py-20'
+              )}
+            >
+              {s.id === 'hero' ? (
+                children(s.id)
+              ) : (
+                <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-[1180px] flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-card/60 shadow-[0_1px_0_0_hsl(var(--foreground)/0.04),0_24px_60px_-24px_hsl(var(--foreground)/0.18)] backdrop-blur-sm">
+                  {children(s.id)}
+                </div>
+              )}
+            </section>
+          ))}
+        </main>
       </div>
     </NavContext.Provider>
+  );
+}
+
+/* ---------------- Top Nav Pill ---------------- */
+
+function NavPill({ onOpen }: { onOpen: () => void }) {
+  return (
+    <div className="fixed left-5 top-5 z-50 md:left-8 md:top-8">
+      <div className="flex items-center gap-3 rounded-full border border-foreground/10 bg-background/70 py-1.5 pl-1.5 pr-4 shadow-lg backdrop-blur-xl">
+        <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-secondary">
+          <Image
+            src="/portrait.jpeg"
+            alt="Abdul Ahad"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+        <span className="text-[14px] font-semibold tracking-tight">
+          Abdul Ahad
+        </span>
+        <button
+          onClick={onOpen}
+          className="ml-1 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -98,29 +168,31 @@ function Sidebar({
   sections,
   activeId,
   onNavigate,
-  activeIndex,
+  onClose,
 }: {
   sections: SectionDef[];
   activeId: string;
   onNavigate: (id: string) => void;
-  activeIndex: number;
+  onClose: () => void;
 }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   return (
-    <aside className="fixed left-0 top-0 z-50 flex h-screen w-[clamp(260px,22vw,340px)] flex-col border-r border-foreground/10 bg-background/80 backdrop-blur-xl">
-      {/* Brand */}
-      <div className="px-6 pt-7 pb-8">
+    <motion.aside
+      initial={{ x: '-100%' }}
+      animate={{ x: 0 }}
+      exit={{ x: '-100%' }}
+      transition={{ type: 'spring', damping: 28, stiffness: 260 }}
+      className="fixed left-0 top-0 z-[70] flex h-screen w-[clamp(280px,85vw,360px)] flex-col border-r border-foreground/10 bg-background/95 backdrop-blur-xl"
+    >
+      {/* Header with close button */}
+      <div className="flex items-center justify-between px-6 pt-7 pb-4">
         <Magnetic strength={0.2}>
-          <a
-            href="#hero"
-            onClick={(e) => {
-              e.preventDefault();
-              onNavigate('hero');
-            }}
-            className="group block"
+          <button
+            onClick={() => onNavigate('hero')}
+            className="group text-left"
           >
             <div className="mono-label text-muted-foreground">Portfolio / 2026</div>
             <div className="mt-1.5 font-display text-[26px] leading-none tracking-tight">
@@ -129,12 +201,19 @@ function Sidebar({
             <div className="mt-1 text-[13px] text-muted-foreground">
               AI Engineer · Full Stack
             </div>
-          </a>
+          </button>
         </Magnetic>
+        <button
+          onClick={onClose}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+          aria-label="Close navigation menu"
+        >
+          <X className="h-5 w-5" />
+        </button>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 px-3">
+      {/* Nav links */}
+      <nav className="flex-1 overflow-y-auto px-3">
         <ul className="space-y-1">
           {sections.map((s) => {
             const active = s.id === activeId;
@@ -174,12 +253,12 @@ function Sidebar({
         </ul>
       </nav>
 
-      {/* Status + socials */}
+      {/* Footer */}
       <div className="border-t border-foreground/10 px-6 py-5">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/70" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/70" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
           </span>
           <span className="mono-label text-muted-foreground">
             Available · Global Remote
@@ -212,7 +291,7 @@ function Sidebar({
           </button>
         </div>
       </div>
-    </aside>
+    </motion.aside>
   );
 }
 
@@ -226,11 +305,7 @@ function SocialIcon({
   children: ReactNode;
 }) {
   return (
-    <Magnetic
-      strength={0.4}
-      href={href}
-      cursorLabel={label}
-    >
+    <Magnetic strength={0.4} href={href} cursorLabel={label}>
       <span
         aria-label={label}
         className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-accent"
@@ -238,105 +313,5 @@ function SocialIcon({
         {children}
       </span>
     </Magnetic>
-  );
-}
-
-/* ---------------- Deck Area ---------------- */
-
-function DeckArea({
-  sections,
-  activeId,
-  direction,
-  activeIndex,
-  children,
-}: {
-  sections: SectionDef[];
-  activeId: string;
-  direction: number;
-  activeIndex: number;
-  children: (activeId: string, direction: number) => ReactNode;
-}) {
-  return (
-    <main className="relative ml-[clamp(260px,22vw,340px)] min-h-screen">
-      <ScrollRail
-        sections={sections}
-        activeIndex={activeIndex}
-        total={sections.length}
-      />
-      <div className="relative mx-auto h-screen w-full max-w-[1180px] px-6 py-6 md:px-10 md:py-8">
-        <AnimatePresence mode="popLayout" custom={direction}>
-          <motion.section
-            key={activeId}
-            custom={direction}
-            initial={{
-              x: direction > 0 ? '8%' : '-8%',
-              opacity: 0,
-              scale: 0.98,
-              filter: 'blur(6px)',
-            }}
-            animate={{
-              x: 0,
-              opacity: 1,
-              scale: 1,
-              filter: 'blur(0px)',
-            }}
-            exit={{
-              x: direction > 0 ? '-12%' : '12%',
-              opacity: 0,
-              scale: 0.94,
-              filter: 'blur(8px)',
-              transition: { duration: 0.45, ease: [0.65, 0, 0.35, 1] },
-            }}
-            transition={{
-              type: 'spring',
-              damping: 26,
-              stiffness: 200,
-              mass: 0.9,
-            }}
-            className="absolute inset-0 mx-auto flex max-w-[1180px] flex-col"
-            style={{ padding: 'inherit' }}
-          >
-            <div className="flex h-full flex-col overflow-y-auto rounded-2xl border border-foreground/10 bg-card/60 shadow-[0_1px_0_0_hsl(var(--foreground)/0.04),0_24px_60px_-24px_hsl(var(--foreground)/0.18)] backdrop-blur-sm md:overflow-hidden">
-              {children(activeId, direction)}
-            </div>
-          </motion.section>
-        </AnimatePresence>
-      </div>
-    </main>
-  );
-}
-
-/* ---------------- Scroll Rail (right edge) ---------------- */
-
-function ScrollRail({
-  sections,
-  activeIndex,
-  total,
-}: {
-  sections: SectionDef[];
-  activeIndex: number;
-  total: number;
-}) {
-  const progress = useSpring(activeIndex / (total - 1), {
-    damping: 30,
-    stiffness: 200,
-  });
-  useEffect(() => {
-    progress.set(activeIndex / (total - 1));
-  }, [activeIndex, total, progress]);
-  const y = useTransform(progress, [0, 1], ['0%', '100%']);
-
-  return (
-    <div className="pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-center gap-3 md:flex">
-      <div className="relative h-40 w-px bg-foreground/10">
-        <motion.div
-          className="absolute left-0 top-0 w-px bg-accent"
-          style={{ height: y }}
-        />
-      </div>
-      <span className="mono-label text-[9px] text-muted-foreground [writing-mode:vertical-rl]">
-        {String(activeIndex + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-      </span>
-    </div>
   );
 }
