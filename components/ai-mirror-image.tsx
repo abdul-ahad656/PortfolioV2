@@ -47,11 +47,18 @@ const DEFAULT_GLOW: Required<AIMirrorGlowSettings> = {
   ringOpacity: 0.35,
 };
 
-function buildMask(x: number, y: number, radius: number, feather: number): string {
+function buildPortraitMask(x: number, y: number, radius: number, feather: number): string {
   if (radius <= 0) return 'none';
   const inner = Math.max(0, radius - feather);
-  // Portrait top layer: hide inside circle (transparent), show outside (black)
+  // Hide portrait inside circle so robot shows through
   return `radial-gradient(circle ${radius}px at ${x}px ${y}px, transparent 0px, transparent ${inner}px, black ${radius}px)`;
+}
+
+function buildRobotMask(x: number, y: number, radius: number, feather: number): string {
+  if (radius <= 0) return 'none';
+  const inner = Math.max(0, radius - feather);
+  // Robot visible ONLY inside the spotlight circle
+  return `radial-gradient(circle ${radius}px at ${x}px ${y}px, black 0px, black ${inner}px, transparent ${radius}px)`;
 }
 
 export function AIMirrorImage({
@@ -102,15 +109,20 @@ export function AIMirrorImage({
     const visible = r > 0.5;
 
     if (portraitLayer) {
-      const mask = buildMask(m.x, m.y, r, edgeFeather);
-      portraitLayer.style.webkitMaskImage = mask;
-      portraitLayer.style.maskImage = mask;
+      portraitLayer.style.webkitMaskImage = buildPortraitMask(m.x, m.y, r, edgeFeather);
+      portraitLayer.style.maskImage = buildPortraitMask(m.x, m.y, r, edgeFeather);
     }
 
     if (robotImage) {
-      robotImage.style.transform = visible
-        ? `scale(${innerScale})`
-        : 'scale(1)';
+      if (visible) {
+        robotImage.style.opacity = '1';
+        robotImage.style.webkitMaskImage = buildRobotMask(m.x, m.y, r, edgeFeather);
+        robotImage.style.maskImage = buildRobotMask(m.x, m.y, r, edgeFeather);
+      } else {
+        robotImage.style.opacity = '0';
+        robotImage.style.webkitMaskImage = 'none';
+        robotImage.style.maskImage = 'none';
+      }
     }
 
     if (glowRing && glowSettings.enabled) {
@@ -134,7 +146,7 @@ export function AIMirrorImage({
     } else {
       rafRef.current = null;
     }
-  }, [circleSize, edgeFeather, glowSettings.enabled, glowSettings.intensity, innerScale]);
+  }, [circleSize, edgeFeather, glowSettings.enabled, glowSettings.intensity]);
 
   const startLoop = useCallback(() => {
     if (rafRef.current == null) {
@@ -208,8 +220,11 @@ export function AIMirrorImage({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Robot — bottom layer, always rendered underneath */}
-      <div ref={robotImageRef} className="ai-mirror-image__robot absolute inset-0">
+      {/* Robot — hidden until hover, revealed only inside spotlight */}
+      <div
+        ref={robotImageRef}
+        className="ai-mirror-image__robot pointer-events-none absolute inset-0 opacity-0"
+      >
         <Image
           src={robotImage}
           alt=""

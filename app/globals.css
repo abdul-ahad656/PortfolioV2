@@ -193,18 +193,14 @@
   touch-action: none;
 }
 
-.ai-mirror-image__portrait {
+.ai-mirror-image__portrait,
+.ai-mirror-image__robot {
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-position: 0 0;
   mask-position: 0 0;
-}
-
-.ai-mirror-image__robot {
-  transform-origin: center bottom;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ai-mirror-image__glow {

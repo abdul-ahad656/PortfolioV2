@@ -40,7 +40,6 @@ export function Hero() {
           alt="Abdul Ahad portrait"
           className="h-full w-full"
           circleSize={160}
-          innerScale={1.07}
           edgeFeather={20}
           priority
           glow={{
