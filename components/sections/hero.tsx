@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import Image from 'next/image';
+import { AIMirrorImage } from '@/components/ai-mirror-image';
 import { Magnetic } from '@/components/magnetic';
 import { useNav } from '@/components/nav-context';
 import type { SectionDef } from '@/components/deck-shell';
@@ -32,15 +32,23 @@ export function Hero() {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-        className="pointer-events-none absolute bottom-0 left-1/2 z-[2] h-[min(88vh,860px)] w-[min(420px,72vw)] -translate-x-1/2 md:w-[min(460px,38vw)] lg:h-[min(92vh,900px)] lg:w-[min(500px,34vw)]"
+        className="absolute bottom-0 left-1/2 z-[2] h-[min(88vh,860px)] w-[min(420px,72vw)] -translate-x-1/2 md:w-[min(460px,38vw)] lg:h-[min(92vh,900px)] lg:w-[min(500px,34vw)]"
       >
-        <Image
-          src="/portrait.jpeg"
+        <AIMirrorImage
+          personImage="/portrait.jpeg"
+          robotImage="/robot.jpeg"
           alt="Abdul Ahad portrait"
-          fill
+          className="h-full w-full"
+          circleSize={160}
+          innerScale={1.07}
+          edgeFeather={20}
           priority
-          sizes="(max-width: 768px) 72vw, 34vw"
-          className="object-contain object-bottom drop-shadow-[0_24px_80px_rgba(0,0,0,0.55)]"
+          glow={{
+            enabled: true,
+            color: '120, 200, 255',
+            intensity: 0.65,
+            ringOpacity: 0.4,
+          }}
         />
       </motion.div>
 
