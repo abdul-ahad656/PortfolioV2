@@ -115,7 +115,7 @@ export function Hero() {
               variants={item}
               className="text-[15px] leading-[1.7] text-muted-foreground md:text-[16px]"
             >
-              Hi, I&apos;m Abdul Ahad — an AI engineer passionate about building
+              Hi, I&apos;m Abdul Ahad, an AI engineer passionate about building
               production-grade RAG pipelines, LLM agents, and scalable systems
               that connect research to real-world impact.
             </motion.p>
@@ -124,7 +124,7 @@ export function Hero() {
               <Magnetic strength={0.2}>
                 <button
                   onClick={() => navigate('projects')}
-                  className="group inline-flex items-center gap-4 rounded-full bg-accent py-3 pl-3 pr-7 text-[15px] font-semibold text-accent-foreground shadow-[0_8px_32px_-8px_hsl(var(--accent)/0.6)] transition-all hover:brightness-110"
+                  className="group inline-flex items-center gap-4 rounded-full bg-accent mb-5 py-3 pl-3 pr-7 text-[15px] font-semibold text-accent-foreground shadow-[0_8px_32px_-8px_hsl(var(--accent)/0.6)] transition-all hover:brightness-110"
                 >
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-foreground/15 transition-transform group-hover:translate-x-0.5">
                     <ArrowRight className="h-4 w-4" />
