@@ -57,7 +57,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="flex w-full translate-y-[calc(4%-5px)] items-end justify-between px-[1.5vw] text-[clamp(3rem,16vw,13rem)] font-bold leading-[0.82] text-foreground"
+          className="flex w-full mb-3 translate-y-[calc(4%-5px)] items-end justify-between px-[1.5vw] text-[clamp(3rem,16vw,13rem)] font-bold leading-[0.82] text-foreground"
           aria-label="Abdul Ahad"
         >
           {Array.from('Abdul Ahad').map((char, i) =>
@@ -124,7 +124,7 @@ export function Hero() {
               <Magnetic strength={0.2}>
                 <button
                   onClick={() => navigate('projects')}
-                  className="group inline-flex items-center gap-4 rounded-full bg-accent mb-5 py-3 pl-3 pr-7 text-[15px] font-semibold text-accent-foreground shadow-[0_8px_32px_-8px_hsl(var(--accent)/0.6)] transition-all hover:brightness-110"
+                  className="group inline-flex items-center gap-4 rounded-full bg-accent mb-9 py-3 pl-3 pr-7 text-[15px] font-semibold text-accent-foreground shadow-[0_8px_32px_-8px_hsl(var(--accent)/0.6)] transition-all hover:brightness-110"
                 >
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-foreground/15 transition-transform group-hover:translate-x-0.5">
                     <ArrowRight className="h-4 w-4" />
@@ -144,5 +144,5 @@ export const heroSection: SectionDef = {
   id: 'hero',
   index: '01',
   label: 'Introduction',
-  title: 'Abdul Ahad — AI Engineer & Full Stack Developer',
+  title: 'Abdul Ahad, AI Engineer & Full Stack Developer',
 };
