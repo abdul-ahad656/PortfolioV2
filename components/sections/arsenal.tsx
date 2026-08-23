@@ -68,10 +68,10 @@ export function Arsenal() {
   }, [hovered]);
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex min-h-[calc(100vh-8rem)] flex-col">
       <SectionHeader index="02" title="Technical Arsenal" subtitle="Interactive Matrix" />
 
-      <div className="flex-1 overflow-y-auto px-6 py-8 md:px-12 md:py-10">
+      <div className="px-6 py-8 md:px-12 md:py-10">
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
           <FilterChip

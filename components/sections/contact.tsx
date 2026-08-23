@@ -23,10 +23,10 @@ export function Contact() {
   };
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex min-h-[calc(100vh-8rem)] flex-col">
       <SectionHeader index="05" title="Contact" subtitle="Direct Line" />
 
-      <div className="flex flex-1 flex-col justify-between overflow-y-auto px-6 py-8 md:px-12 md:py-12">
+      <div className="flex flex-col justify-between px-6 py-8 md:px-12 md:py-12">
         <div className="max-w-2xl">
           <motion.h2
             initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}

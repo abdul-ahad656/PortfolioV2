@@ -131,17 +131,17 @@ export function DeckShell({ sections, children }: DeckShellProps) {
           {/* Scroll spacer — one viewport of hero before sections stack up */}
           <div className="relative h-screen w-full" aria-hidden />
 
-          {/* Stacking sections — slide up and cover the hero */}
+          {/* Stacking sections — scroll naturally and layer over the hero */}
           {sections
             .filter((s) => s.id !== 'hero')
             .map((s, i) => (
               <section
                 key={s.id}
                 id={s.id}
-                className="sticky top-0 min-h-screen bg-background px-4 py-16 md:px-8 md:py-20"
+                className="relative min-h-screen rounded-t-[2rem] bg-background px-4 py-16 shadow-[0_-40px_80px_-16px_rgba(0,0,0,0.55)] md:rounded-t-[2.5rem] md:px-8 md:py-20"
                 style={{ zIndex: 10 + i }}
               >
-                <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-[1180px] flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-[0_1px_0_0_hsl(var(--foreground)/0.04),0_24px_60px_-24px_hsl(var(--foreground)/0.18)] backdrop-blur-sm">
+                <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-[1180px] flex-col rounded-2xl border border-foreground/10 bg-card shadow-[0_1px_0_0_hsl(var(--foreground)/0.04),0_24px_60px_-24px_hsl(var(--foreground)/0.18)]">
                   {children(s.id)}
                 </div>
               </section>
