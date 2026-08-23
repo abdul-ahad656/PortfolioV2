@@ -72,7 +72,7 @@ export function TechnologyField({
             style={{ opacity: statementOpacity, y: statementY }}
             className="pointer-events-none absolute inset-x-0 top-1/2 z-40 -translate-y-1/2 px-6 text-center md:px-12"
           >
-            <p className="text-[clamp(1.8rem,5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-foreground">
+            <p className="text-[clamp(1.8rem,5vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[hsl(270_6%_10.5%)]">
               I DON&apos;T COLLECT
               <br />
               TECHNOLOGY.
@@ -138,11 +138,10 @@ function FieldNode({
           : `translate(-50%, -50%) scale(${active ? 1.04 : highlighted ? 1.02 : 1})`,
       }}
       className={cn(
-        'engine-room-node absolute whitespace-nowrap rounded-md border px-3 py-1.5 text-[11px] font-medium tracking-wide transition-[border-color,color,box-shadow] duration-300 md:px-4 md:py-2 md:text-[12px]',
-        highlighted
-          ? 'engine-room-node--active border-accent text-accent shadow-[0_0_24px_hsl(var(--accent)/0.25)]'
-          : 'border-foreground/15 bg-card text-foreground hover:border-foreground/30',
-        dimmed && 'opacity-25'
+        'engine-room-node engine-room-pill absolute whitespace-nowrap rounded-full px-3.5 py-2 text-[11px] font-semibold tracking-wide md:px-4 md:py-2.5 md:text-[12px]',
+        active && 'engine-room-pill--active',
+        !active && highlighted && 'engine-room-pill--related',
+        dimmed && '!opacity-30'
       )}
     >
       {tech.name}

@@ -226,12 +226,54 @@
 .engine-room {
   --background: 36 25% 97.5%;
   --foreground: 270 6% 10.5%;
-  --card: 0 0% 100%;
+  --card: 36 22% 96%;
   --card-foreground: 270 6% 10.5%;
   --muted-foreground: 270 6% 38%;
   --border: 270 6% 10.5% / 0.12;
+  --color-background: hsl(36 25% 97.5%);
+  --color-foreground: hsl(270 6% 10.5%);
+  --color-card: hsl(36 22% 96%);
+  --color-card-foreground: hsl(270 6% 10.5%);
+  --color-muted-foreground: hsl(270 6% 38%);
+  --color-border: hsl(270 6% 10.5% / 0.12);
   background: hsl(var(--background));
   color: hsl(var(--foreground));
+}
+
+.engine-room-pill {
+  border: 1px solid hsl(270 6% 10.5% / 0.12);
+  background: hsl(0 0% 100%);
+  color: hsl(270 6% 10.5%);
+  box-shadow:
+    0 1px 2px hsl(270 6% 10.5% / 0.04),
+    0 4px 12px hsl(270 6% 10.5% / 0.03);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.engine-room-pill:hover {
+  border-color: hsl(var(--accent) / 0.45);
+  background: hsl(0 0% 100%);
+  box-shadow:
+    0 2px 8px hsl(var(--accent) / 0.12),
+    0 8px 20px hsl(270 6% 10.5% / 0.06);
+}
+
+.engine-room-pill--related {
+  border-color: hsl(var(--accent) / 0.55);
+  background: hsl(36 25% 98%);
+  color: hsl(var(--accent));
+}
+
+.engine-room-pill--active {
+  border-color: hsl(var(--accent));
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  box-shadow: 0 8px 28px -6px hsl(var(--accent) / 0.55);
 }
 
 .engine-room-line {

@@ -134,11 +134,10 @@ export function ArchitectureMap({
                   top: `${tech.arch.y}%`,
                 }}
                 className={cn(
-                  'arch-node absolute -translate-x-1/2 -translate-y-1/2 rounded-md border px-2 py-1 text-[9px] font-medium tracking-wide transition-all duration-300 md:px-3 md:py-1.5 md:text-[10px]',
-                  highlighted
-                    ? 'engine-room-node--active border-accent bg-card text-accent shadow-[0_0_20px_hsl(var(--accent)/0.22)]'
-                    : 'border-foreground/15 bg-card text-foreground',
-                  dimmed && 'opacity-20'
+                  'arch-node engine-room-pill absolute -translate-x-1/2 -translate-y-1/2 rounded-full px-2.5 py-1.5 text-[9px] font-semibold tracking-wide md:px-3.5 md:py-2 md:text-[10px]',
+                  active && 'engine-room-pill--active',
+                  !active && highlighted && 'engine-room-pill--related',
+                  dimmed && '!opacity-25'
                 )}
               >
                 {tech.name}
@@ -153,7 +152,7 @@ export function ArchitectureMap({
             {layers.map((layer) => (
               <span
                 key={layer.id}
-                className="mono-label text-[9px] text-muted-foreground md:text-[10px]"
+                className="mono-label text-[9px] text-[hsl(270_6%_38%)] md:text-[10px]"
               >
                 {layer.index} / {layer.label}
               </span>

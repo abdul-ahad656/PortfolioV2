@@ -45,11 +45,10 @@ export function TechnologyNode({
       onBlur={() => onActivate(null)}
       onClick={() => onActivate(active ? null : tech.id)}
       className={cn(
-        'engine-room-node absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-md border px-3 py-1.5 text-[11px] font-medium tracking-wide transition-[border-color,color,box-shadow,opacity] duration-300 md:px-4 md:py-2 md:text-[12px]',
-        highlighted
-          ? 'engine-room-node--active border-accent text-accent shadow-[0_0_24px_hsl(var(--accent)/0.25)]'
-          : 'border-foreground/15 bg-card text-foreground hover:border-foreground/30',
-        dimmed && 'opacity-25'
+        'engine-room-node engine-room-pill absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full px-3.5 py-2 text-[11px] font-semibold tracking-wide md:px-4 md:py-2.5 md:text-[12px]',
+        active && 'engine-room-pill--active',
+        !active && highlighted && 'engine-room-pill--related',
+        dimmed && '!opacity-30'
       )}
       style={{
         left: `${tech.float.x}%`,

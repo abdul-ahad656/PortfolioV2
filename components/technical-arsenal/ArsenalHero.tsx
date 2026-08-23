@@ -21,21 +21,21 @@ export function ArsenalHero({ scrollProgress, reducedMotion }: ArsenalHeroProps)
       <div className="mx-auto w-full max-w-[1400px]">
         <div className="mb-8 flex flex-wrap items-center gap-x-6 gap-y-2">
           <span className="mono-label text-accent">SYSTEM / 02</span>
-          <span className="mono-label text-muted-foreground">STACK STATUS / ONLINE</span>
+          <span className="mono-label text-[hsl(270_6%_38%)]">STACK STATUS / ONLINE</span>
         </div>
 
         <motion.div style={{ y: y1 }}>
-          <h2 className="text-[clamp(3.5rem,14vw,11rem)] font-bold leading-[0.85] tracking-[-0.04em] text-foreground">
+          <h2 className="text-[clamp(3.5rem,14vw,11rem)] font-bold leading-[0.85] tracking-[-0.04em] text-[hsl(270_6%_10.5%)]">
             TECHNICAL
           </h2>
         </motion.div>
         <motion.div style={{ y: y2 }}>
-          <h2 className="text-[clamp(3.5rem,14vw,11rem)] font-bold leading-[0.85] tracking-[-0.04em] text-foreground/90">
+          <h2 className="text-[clamp(3.5rem,14vw,11rem)] font-bold leading-[0.85] tracking-[-0.04em] text-[hsl(270_6%_10.5%/0.85)]">
             ARSENAL
           </h2>
         </motion.div>
 
-        <p className="mt-8 max-w-md text-[14px] leading-relaxed text-muted-foreground md:text-[15px]">
+        <p className="mt-8 max-w-md text-[14px] leading-relaxed text-[hsl(270_6%_38%)] md:text-[15px]">
           THE STACK BEHIND THE SYSTEMS I BUILD.
         </p>
       </div>

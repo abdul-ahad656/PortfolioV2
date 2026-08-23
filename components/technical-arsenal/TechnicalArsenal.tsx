@@ -66,7 +66,7 @@ export function TechnicalArsenal() {
         )}
       >
         <div className="pointer-events-none absolute right-6 top-24 z-50 hidden md:block">
-          <span className="mono-label text-[10px] text-muted-foreground">
+          <span className="mono-label text-[10px] text-[hsl(270_6%_38%)]">
             STACK / {stackLabel}
           </span>
           <span className="mono-label mt-1 block text-[9px] text-accent">
@@ -97,7 +97,7 @@ export function TechnicalArsenal() {
         />
 
         <div className="pointer-events-none absolute bottom-8 left-1/2 z-50 -translate-x-1/2 md:hidden">
-          <span className="mono-label text-[9px] text-muted-foreground">
+          <span className="mono-label text-[9px] text-[hsl(270_6%_38%)]">
             STACK / {stackLabel} · {stackLayer}
           </span>
         </div>
@@ -116,12 +116,12 @@ function ActiveTechDetail({ activeId }: { activeId: string }) {
     .slice(0, 4);
 
   return (
-    <div className="mt-4 max-w-[160px] border-t border-foreground/10 pt-3">
+    <div className="mt-4 max-w-[160px] border-t border-[hsl(270_6%_10.5%/0.12)] pt-3">
       <span className="mono-label block text-[9px] text-accent">
         {tech.name.toUpperCase()}
       </span>
       {relatedNames.length > 0 && (
-        <span className="mono-label mt-2 block text-[8px] leading-relaxed text-muted-foreground">
+        <span className="mono-label mt-2 block text-[8px] leading-relaxed text-[hsl(270_6%_38%)]">
           → {relatedNames.join(' · ')}
         </span>
       )}
